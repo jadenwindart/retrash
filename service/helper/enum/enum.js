@@ -1,0 +1,7 @@
+module.exports.INVOICE_STATUS = {
+    INITIATED: 'INITIATED'
+}
+
+module.exports.TRANSACTION_STATUS = {
+    INITIATED: 'INITIATED'
+}
