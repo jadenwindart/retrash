@@ -5,3 +5,8 @@ module.exports.INVOICE_STATUS = {
 module.exports.TRANSACTION_STATUS = {
     INITIATED: 'INITIATED'
 }
+
+module.exports.OFFICER_TYPE = {
+    FIELD_OFFICER: 'FIELD_OFFICER',
+    ADMINISTRATOR: 'ADMINISTRATOR'
+}
