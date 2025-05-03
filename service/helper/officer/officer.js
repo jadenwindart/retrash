@@ -4,6 +4,9 @@ const { v4 } = require('uuid');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
+const paginationUtil = require('../util/pagination');
+const { Op } = require('sequelize');
+
 const generateToken = (payload) => {
   const secretKey = process.env.SERVICE_SECRET; // Replace with your own secret key
   const options = {
@@ -73,4 +76,39 @@ const hashPassword = (password) => {
     const salt = bcrypt.genSaltSync(saltRounds)
     
     return bcrypt.hashSync(password, salt)
+}
+
+module.exports.OfficerList = async ({filter={},sort=[],limit,page}) => {
+    pagination = paginationUtil.Paginate({limit,page})
+
+    whereClause = _.map(filter, (v,k) => {
+        return {
+            [k]: {
+                [Op.eq]: v
+            }
+        }
+    })
+
+    if (sort == []) {
+        sort = ['createdAt', 'DESC']
+    } else {
+        sort = JSON.parse(sort)
+    }
+
+    console.log(sort)
+    return Officer.findAll({
+        attributes: { exclude: ['password'] },
+        where: whereClause,
+        order: sort,
+        limit: pagination.limit,
+        offset: pagination.offset,
+    })
+}
+
+module.exports.UpdateOfficer = async(updateOfficer) => {
+    existingOfficer = await Officer.findOne({ where: {id:updateOfficer.id}, attribute: { exclude: ['password']}})
+
+    existingOfficer = _.merge(existingOfficer, updateOfficer)
+
+    return existingOfficer.save()
 }

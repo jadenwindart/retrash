@@ -2,6 +2,16 @@ const _ = require("lodash");
 const residentHelper = require("../../../helper/resident/resident");
 const invoiceHelper = require("../../../helper/invoice/invoice")
 const transactionHelper = require("../../../helper/transaction/transaction")
+const midtransHelper = require("../../../helper/midtrans/midtrans")
+const whatsappHelper = require("../../../helper/whatsapp/whatsapp")
+const phonenumberUtil = require("../../../helper/util/phonenumber")
+
+const generateInvoiceMessage = ({name, invoiceDate, paymentLink}) => `
+    Halo ${name},\n
+    Berikut tagihan anda yang tercatat pada tanggal ${invoiceDate}/\n
+    Pembayaran dapat menggunakan link dibawah ini:
+    ${paymentLink}
+`
 
 module.exports = async () => {
     // Get All resident for invoice creation
@@ -10,15 +20,37 @@ module.exports = async () => {
     console.log(residents)
     console.log("found " + residents.length + " active residents.")
     _.forEach(residents, async(resident) => {
-        console.log("Start creating invoice...")
-        // Create invoices
-        invoice = await invoiceHelper.CreateInvoice({resident:resident})
-        console.log(invoice)
-        // Create Transaction in Payment Gateway
+        try{
+            console.log("Start creating invoice...")
+            // Create invoices
+            invoice = await invoiceHelper.CreateInvoice({resident:resident})
 
-        // Create transactions
-        transaction = await transactionHelper.Initiate({resident: resident, invoice: invoice})
+            // Create transactions
+            transaction = await transactionHelper.Initiate({resident: resident, invoice: invoice})
 
-        // Notify resident using whatsapp
+            // Create Transaction in Payment Gateway
+            midtransResp = await midtransHelper.generatePaymentLink({
+                invoiceId: invoice.id,
+                amount: invoice.amount,
+                resident: resident
+            }).then(res => res.json());
+
+            console.log(midtransResp)
+    
+            // Notify resident using whatsapp
+            whatsappResp = await whatsappHelper.sendMessage({
+                phoneNumber: phonenumberUtil.sanitizeIndonesiPhoneNumber(resident.phoneNumber),
+                message: generateInvoiceMessage({
+                    name:resident.name,
+                    invoiceDate: invoice.invoiceDate,
+                    paymentLink: midtransResp.payment_url})
+            }).then(res => res.json());
+
+            console.log(whatsappResp)
+
+            await invoiceHelper.UpdateInvoiceSentAt(invoice)
+        } catch(err) {
+            console.log(err)
+        }
     })
 }

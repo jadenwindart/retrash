@@ -9,7 +9,12 @@ module.exports.CreateInvoice = async ({resident}) => {
         'amount': '10000',
         'invoice_date': moment().toDate(),
         'last_sent_at': null,
-        'status': INVOICE_STATUS.INITIATED,
+        'status': INVOICE_STATUS.UNPAID,
         'resident_id': resident.id
     })
+}
+
+module.exports.UpdateInvoiceSentAt = async (invoice) => {
+    invoice.lastSentAt = moment()
+    return invoice.save()
 }
