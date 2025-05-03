@@ -1,6 +1,7 @@
 const express = require('express')
 const authRouter = require('./handler/auth')
 const officerRouter = require('./handler/officer')
+const residentRouter = require('./handler/resident')
 const middleware = require("./handler/middleware")
 require('dotenv').config();
 const app = express()
@@ -17,6 +18,8 @@ app.use('/v1/auth', authRouter)
 
 // officer router
 app.use('/v1/officers', middleware.validateToken, officerRouter)
+// resident router
+app.use('/v1/residents', middleware.validateToken, residentRouter)
 
 
 app.listen(port, () => {

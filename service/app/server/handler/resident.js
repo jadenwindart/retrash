@@ -1,37 +1,34 @@
 const express = require('express')
-const officerHelper = require('../../../helper/officer/officer')
+const residentHelper = require('../../../helper/resident/resident')
 const router = express.Router()
 
-const register = async (req, res) => {
-    try{
+const create = async (req, res) => {
+    try {
         body = req.body
 
-        officer = await officerHelper.Register({
-            username: body.username,
-            plainPassword: body.password,
-            type: body.type
-        })
+        resident = await residentHelper.CreateResident(body)
 
-        res.send(officer)
+        res.send(resident)
     } catch(err) {
-        console.log(err);
+        console.log(err)
 
         res.send({error: "Terjadi kesalahan pada sistem"})
     }
 }
 
 const list = async (req, res) => {
-    try{
+    try {
         queryParams = req.query
 
-        officers = await officerHelper.OfficerList({
+        console.log(queryParams)
+        residents = await residentHelper.GetResidentList({
             filter: JSON.parse(queryParams.filter||'{}'),
             sort:queryParams.sort,
             limit: queryParams.limit,
             page: queryParams.page
         })
 
-        res.send(officers)
+        res.send(residents)
     } catch(err) {
         console.log(err);
 
@@ -43,9 +40,9 @@ const update = async(req, res) => {
     try {
         body = req.body;
 
-        officer = await officerHelper.UpdateOfficer({...body, id: req.params.officerId})
+        resident = await residentHelper.UpdateResident({...body, id: req.params.residentId})
 
-        res.send(officer)
+        res.send(resident)
     } catch(err) {
         console.log(err);
 
@@ -53,9 +50,8 @@ const update = async(req, res) => {
     }
 }
 
-router.post('/register', register)
-
+router.post('', create)
 router.get('', list)
-router.patch('/:officerId', update)
+router.patch('/:residentId', update)
 
 module.exports = router

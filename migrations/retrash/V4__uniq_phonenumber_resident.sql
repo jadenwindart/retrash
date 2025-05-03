@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS  "resident_phonenumber_uidx" ON residents USING BTREE(phone_number) WHERE is_delete=false;

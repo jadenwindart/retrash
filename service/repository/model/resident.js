@@ -8,17 +8,20 @@ module.exports.Resident = db.sequelize.define(
     {
         id: {
         primaryKey: true,
-        type: DataTypes.UUIDV4,
-        allowNull: false,
+            type: DataTypes.UUIDV4,
+            allowNull: false,
         },
         name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         phoneNumber: {
-        type: DataTypes.STRING,
-        allowNull: false,
+            type: DataTypes.STRING,
+            allowNull: false,
         },
+        isDelete: {
+            type: DataTypes.BOOLEAN,
+        }
     }
 );
 

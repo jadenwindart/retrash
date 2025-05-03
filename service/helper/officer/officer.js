@@ -89,16 +89,20 @@ module.exports.OfficerList = async ({filter={},sort=[],limit,page}) => {
         }
     })
 
-    if (sort == []) {
-        sort = ['createdAt', 'DESC']
+    if (sort.length) {
+        sort = [['createdAt', 'DESC']]
     } else {
         sort = JSON.parse(sort)
     }
 
-    console.log(sort)
     return Officer.findAll({
         attributes: { exclude: ['password'] },
-        where: whereClause,
+        where: {
+            ...whereClause,
+            isDelete: {
+                [Op.eq]: false
+            }
+        },
         order: sort,
         limit: pagination.limit,
         offset: pagination.offset,

@@ -1,0 +1,4 @@
+ALTER TABLE residents
+ADD COLUMN IF NOT EXISTS is_delete BOOLEAN DEFAULT FALSE;
+
+DROP INDEX IF EXISTS "resident_phonenumber_uidx";
