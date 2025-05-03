@@ -2,9 +2,9 @@ const express = require('express')
 const authRouter = require('./handler/auth')
 const officerRouter = require('./handler/officer')
 const middleware = require("./handler/middleware")
-const app = express()
-const port = 8080
 require('dotenv').config();
+const app = express()
+const port = process.env.APP_PORT
 
 app.get('/health', (req, res) => {
   res.send('OK')
