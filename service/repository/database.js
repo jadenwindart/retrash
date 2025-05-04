@@ -3,8 +3,8 @@ const Sequelize = require('sequelize');
 db = {}
 
 const sequelize = new Sequelize('retrash', 'postgres', 'postgres', {
-    host: 'localhost',
-    port: 5433,
+    host: process.env.POSTGRES_DB_HOST,
+    port: process.env.POSTGRES_DB_PORT,
     dialect: 'postgres',
     "define": {
         "underscored": true
