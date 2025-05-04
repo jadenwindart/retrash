@@ -1,5 +1,6 @@
 const db = require('../database');
-const { DataTypes} = require("sequelize")
+const { DataTypes} = require("sequelize");
+const { IssueReport } = require("./issue_report");
 
 module.exports.Officer = db.sequelize.define(
     'officers',
@@ -23,3 +24,6 @@ module.exports.Officer = db.sequelize.define(
         },
     }
 )
+
+module.exports.Officer.hasMany(IssueReport)
+IssueReport.belongsTo(module.exports.Officer)
