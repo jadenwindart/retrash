@@ -3,7 +3,8 @@ module.exports.INVOICE_STATUS = {
 }
 
 module.exports.TRANSACTION_STATUS = {
-    INITIATED: 'INITIATED'
+    INITIATED: 'INITIATED',
+    COMPLETED: 'COMPLETED'
 }
 
 module.exports.OFFICER_TYPE = {
