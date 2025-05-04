@@ -10,7 +10,7 @@ const create = async (req, res) => {
 
         issueReport = await issueReportHelper.createIssue({
             ...body,
-            reportedBy: officerSession.id
+            officerId: officerSession.id
         })
 
         res.send(issueReport)
