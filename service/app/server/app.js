@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const authRouter = require('./handler/auth')
 const officerRouter = require('./handler/officer')
@@ -5,7 +6,6 @@ const residentRouter = require('./handler/resident')
 const issueReportRouter = require('./handler/issue_report')
 const officerHelper = require('../../helper/officer/officer');
 const middleware = require("./handler/middleware")
-require('dotenv').config();
 const app = express()
 const port = process.env.APP_PORT
 
