@@ -37,7 +37,8 @@ module.exports.Login = async ({username, plainPassword}) => {
     })
 
     return {
-        token: token
+        token: token,
+        officer: _.omit(officer.toJSON(), ['password'])
     }
 }
 
