@@ -89,7 +89,7 @@ module.exports.OfficerList = async ({filter={},sort=[],limit,page}) => {
         }
     })
 
-    if (sort.length) {
+    if (sort.lengt == 0) {
         sort = [['createdAt', 'DESC']]
     } else {
         sort = JSON.parse(sort)
