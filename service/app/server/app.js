@@ -6,6 +6,7 @@ const residentRouter = require('./handler/resident')
 const issueReportRouter = require('./handler/issue_report')
 const officerHelper = require('../../helper/officer/officer');
 const transactionRouter = require('./handler/transaction');
+const invoiceRouter = require('./handler/invoice');
 const middleware = require("./handler/middleware")
 const enumHelper = require("../../helper/enum/enum")
 const app = express()
@@ -26,8 +27,10 @@ app.use('/v1/officers', middleware.validateToken, officerRouter)
 app.use('/v1/residents', middleware.validateToken, residentRouter)
 // issue report router
 app.use('/v1/issue-reports', middleware.validateToken, issueReportRouter)
-// transactions
+// transactions router
 app.use('/v1/transactions', middleware.validateToken, transactionRouter)
+// invoice router
+app.use('/v1/invoices', middleware.validateToken, invoiceRouter)
 
 app.listen(port, async() => {
   // default user

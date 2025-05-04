@@ -1,7 +1,10 @@
 const moment = require("moment");
-const {Invoice} = require("../../repository/model/invoice")
+const {Invoice} = require("../../repository/model/invoice");
+const {Resident} = require("../../repository/model/resident");
 const { v4 } = require('uuid');
-const {INVOICE_STATUS} = require('../enum/enum')
+const _ = require('lodash');
+const {INVOICE_STATUS} = require('../enum/enum');
+const paginationUtil = require('../util/pagination');
 
 module.exports.CreateInvoice = async ({resident}) => {
    return Invoice.create({
@@ -17,4 +20,30 @@ module.exports.CreateInvoice = async ({resident}) => {
 module.exports.UpdateInvoiceSentAt = async (invoice) => {
     invoice.lastSentAt = moment()
     return invoice.save()
+}
+
+module.exports.InvoiceList = async ({filter={},sort=[],limit,page}) => {
+    pagination = paginationUtil.Paginate({limit,page})
+    
+        whereClause = _.map(filter, (v,k) => {
+            return {
+                [k]: {
+                    [Op.eq]: v
+                }
+            }
+        })
+    
+        if (sort.length == 0) {
+            sort = [['createdAt', 'DESC']]
+        } else {
+            sort = JSON.parse(sort)
+        }
+    
+        return Invoice.findAll({
+            where: whereClause,
+            order: sort,
+            limit: pagination.limit,
+            offset: pagination.offset,
+            include: Resident
+        })
 }

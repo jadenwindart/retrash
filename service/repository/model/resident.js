@@ -27,3 +27,4 @@ module.exports.Resident = db.sequelize.define(
 
 module.exports.Resident.hasMany(Invoice)
 module.exports.Resident.hasMany(Transaction)
+Invoice.belongsTo(module.exports.Resident)

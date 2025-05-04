@@ -20,7 +20,6 @@ const list = async (req, res) => {
     try {
         queryParams = req.query
 
-        console.log(queryParams)
         residents = await residentHelper.GetResidentList({
             filter: JSON.parse(queryParams.filter||'{}'),
             sort:queryParams.sort,

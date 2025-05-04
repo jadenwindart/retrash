@@ -1,6 +1,7 @@
 const db = require('../database');
 const { DataTypes} = require("sequelize")
 const {Transaction} = require("./transaction")
+const {Resident} = require("./resident");
 
 module.exports.Invoice = db.sequelize.define(
     'invoices',
