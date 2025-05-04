@@ -6,6 +6,7 @@ const residentRouter = require('./handler/resident')
 const issueReportRouter = require('./handler/issue_report')
 const officerHelper = require('../../helper/officer/officer');
 const middleware = require("./handler/middleware")
+const enumHelper = require("../../helper/enum/enum")
 const app = express()
 const port = process.env.APP_PORT
 
@@ -30,7 +31,7 @@ app.listen(port, async() => {
   admin = await officerHelper.GetByUsername("admin")
 
   if (!admin) {
-    await officerHelper.Register({username: "admin", plainPassword: "admin"})
+    await officerHelper.Register({username: "admin", plainPassword: "admin", type: enumHelper.OFFICER_TYPE.ADMINISTRATOR})
   }
 
   console.log(`Server app listening on port ${port}`)
