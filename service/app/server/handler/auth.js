@@ -4,14 +4,21 @@ const middleware = require('./middleware')
 const router = express.Router()
 
 const login = async (req, res) => {
-    body = req.body
+    try {
+        body = req.body
 
-    loginToken = await officerHelper.Login({ 
-        username: body.username,
-        plainPassword: body.password, 
-    })
+        loginToken = await officerHelper.Login({ 
+            username: body.username,
+            plainPassword: body.password, 
+        })
 
-    res.send(loginToken);
+        res.send(loginToken);
+    } catch (error) {
+        console.log(error)
+
+        res.status(401).send({error: "Wrong username or password"})
+    }
+    
 }
 
 const refreshToken = async (req, res) => {
