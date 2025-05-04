@@ -22,6 +22,9 @@ module.exports.Officer = db.sequelize.define(
             allowNull: false,
             type: DataTypes.STRING,
         },
+        isDelete: {
+            type: DataTypes.BOOLEAN,
+        }
     }
 )
 
