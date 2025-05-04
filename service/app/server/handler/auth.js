@@ -24,5 +24,6 @@ const refreshToken = async (req, res) => {
 
 router.post('/login', login)
 router.post('/refresh', middleware.validateToken, refreshToken)
+router.get('/me', middleware.validateToken, (req,res) => res.send(req.officer))
 
 module.exports = router
