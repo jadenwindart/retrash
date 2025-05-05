@@ -31,3 +31,7 @@ const payment = async (req, res) => {
         res.status(500)
     }
 }
+
+router.post('/v1/payment', payment)
+
+module.exports = router
