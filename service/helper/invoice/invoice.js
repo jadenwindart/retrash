@@ -5,6 +5,7 @@ const { v4 } = require('uuid');
 const _ = require('lodash');
 const {INVOICE_STATUS} = require('../enum/enum');
 const paginationUtil = require('../util/pagination');
+const whatsappHelper = require('../whatsapp/whatsapp')
 
 module.exports.CreateInvoice = async ({resident}) => {
    return Invoice.create({
@@ -48,12 +49,26 @@ module.exports.InvoiceList = async ({filter={},sort=[],limit,page}) => {
     })
 }
 
+const generatePaidMessage = ({name,invoiceDate}) => `
+    Halo ${name},\n
+    Terima kasih sudah melakukan pembayaran tagihan untuk tanggal ${invoiceDate}
+`
+
 module.exports.UpdateInvoiceStatus = async ({invoiceId,invoiceStatus}) => {
-    invoice = await Invoice.findOne({id:invoiceId})
+    invoice = await Invoice.findOne({where: {id:invoiceId}, include:Resident})
 
     invoice.status=invoiceStatus
 
     await invoice.save()
+
+    if (invoiceStatus == INVOICE_STATUS.PAID) {
+        const resident = _.get(invoice, "resident")
+
+        if (resident){
+            const message = generatePaidMessage({name:resident.name, invoiceDate: invoice.invoiceDate})
+            await whatsappHelper.sendMessage({phoneNumber:resident.phoneNumber, message})
+        }
+    }
 
     return invoice
 }
