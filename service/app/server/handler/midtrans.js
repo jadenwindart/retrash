@@ -19,18 +19,18 @@ const payment = async (req, res) => {
     
         const validSignature = midtransHelper.validatePaymentNotificationSignature(pickedBody)
         if (!validSignature) {
-            res.status(401)
+            res.status(401).send()
         }
 
         orderId = pickedBody.order_id.substring(0, 36)
     
         await transactionHelper.updateCompleteTransaction({invoiceId: orderId, paidAmount: pickedBody.gross_amount})
     
-        res.status(200)   
+        res.status(200).send()
     } catch (error) {
         console.log(error)
 
-        res.status(500)
+        res.status(500).send()
     }
 }
 
