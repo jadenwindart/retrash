@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const phonenumberUtil = require('../util/phonenumber');
 
 WTS_HOST =process.env.WTS_HOST
 
@@ -22,8 +23,10 @@ const generateAccessToken = () => {
 }
 
 module.exports.sendMessage = async ({phoneNumber,message}) => {
+    const sanitizeIndonesiPhoneNumber = phonenumberUtil.sanitizeIndonesiPhoneNumber(phoneNumber)
+
     let data = JSON.stringify({
-        "phone": phoneNumber,
+        "phone": sanitizeIndonesiPhoneNumber,
         "message": message
     });
 

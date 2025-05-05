@@ -38,7 +38,7 @@ module.exports = async () => {
 
             // Notify resident using whatsapp
             whatsappResp = await whatsappHelper.sendMessage({
-                phoneNumber: phonenumberUtil.sanitizeIndonesiPhoneNumber(resident.phoneNumber),
+                phoneNumber: resident.phoneNumber,
                 message: generateInvoiceMessage({
                     name:resident.name,
                     invoiceDate: invoice.toJSON().invoiceDate,
