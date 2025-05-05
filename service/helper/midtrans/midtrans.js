@@ -54,9 +54,6 @@ module.exports.generatePaymentLink = async ({invoiceId, amount, resident}) => {
         },
         "title": "Retribusi Sampah",
         "payment_link_type": "FIXED_AMOUNT",
-        "callbacks": {
-          "finish": "https://www.google.com?merchant_order_id=test-122"
-        }
       })
     };
     

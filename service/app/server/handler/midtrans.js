@@ -21,8 +21,10 @@ const payment = async (req, res) => {
         if (!validSignature) {
             res.status(401)
         }
+
+        orderId = pickedBody.order_id.substring(0, 36)
     
-        await transactionHelper.updateCompleteTransaction({invoiceId:pickedBody.order_id, paidAmount:pickedBody.gross_amount})
+        await transactionHelper.updateCompleteTransaction({invoiceId: orderId, paidAmount: pickedBody.gross_amount})
     
         res.status(200)   
     } catch (error) {
