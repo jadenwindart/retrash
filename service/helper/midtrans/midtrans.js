@@ -1,4 +1,5 @@
 const moment = require('moment')
+const CryptoJS = require('crypto-js');
 
 const midtransURL = process.env.MIDTRANS_URL
 const midtransServerKey = process.env.MIDTRANS_SERVER_KEY
@@ -60,4 +61,13 @@ module.exports.generatePaymentLink = async ({invoiceId, amount, resident}) => {
     };
     
     return fetch(url, options)
+}
+
+// SHA512(order_id + status_code + gross_amount + serverkey)
+module.exports.validatePaymentNotificationSignature = async ({signature_key,order_id,status_code,gross_amount}) => {
+    const message = `${order_id}${status_code}${gross_amount}${midtransServerKey}`
+ 
+    const hash = CryptoJS.SHA512(message).toString();
+
+    return signature_key == hash
 }

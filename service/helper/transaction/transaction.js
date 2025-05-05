@@ -2,8 +2,9 @@ const {Transaction} = require('../../repository/model/transaction')
 const { v4 } = require('uuid');
 const _ = require('lodash');
 const paginationUtil = require('../util/pagination');
+const invoiceHelper = require('../invoice/invoice');
 const { Op } = require('sequelize');
-const {TRANSACTION_STATUS} = require('../enum/enum')
+const {TRANSACTION_STATUS, INVOICE_STATUS} = require('../enum/enum');
 
 module.exports.Initiate = ({resident,invoice,isManual=false}) => {
     return Transaction.create({
@@ -44,4 +45,15 @@ module.exports.list = ({filter={},sort=[],limit,page}) => {
         limit: pagination.limit,
         offset: pagination.offset,
     })
+}
+
+module.exports.updateCompleteTransaction = async ({invoiceId,paidAmount}) => {
+    const transaction = await Transaction.findOne({ where: {invoiceId: invoiceId}})
+
+    transaction.paidAmount = paidAmount
+    transaction.status = TRANSACTION_STATUS.COMPLETED
+    
+    await transaction.save()
+
+    await invoiceHelper.UpdateInvoiceStatus({invoiceId: invoiceId, invoiceStatus: INVOICE_STATUS.PAID})
 }

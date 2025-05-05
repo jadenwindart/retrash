@@ -1,5 +1,6 @@
 module.exports.INVOICE_STATUS = {
-    UNPAID: 'UNPAID'
+    UNPAID: 'UNPAID',
+    PAID: 'PAID'
 }
 
 module.exports.TRANSACTION_STATUS = {
