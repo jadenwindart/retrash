@@ -9,6 +9,7 @@ const transactionRouter = require('./handler/transaction');
 const invoiceRouter = require('./handler/invoice');
 const middleware = require("./handler/middleware")
 const enumHelper = require("../../helper/enum/enum")
+var cors = require('cors')
 const app = express()
 const port = process.env.APP_PORT
 
@@ -16,6 +17,7 @@ app.get('/health', (req, res) => {
   res.send('OK')
 })
 
+app.use(cors());
 app.use(express.json());
 
 // auth router
