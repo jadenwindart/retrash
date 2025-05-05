@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const Promise = require("bluebird");
 const residentHelper = require("../../../helper/resident/resident");
 const invoiceHelper = require("../../../helper/invoice/invoice")
 const transactionHelper = require("../../../helper/transaction/transaction")
@@ -17,11 +18,11 @@ module.exports = async () => {
     // Get All resident for invoice creation
     const residents = await residentHelper.GetAllResident()
 
-    console.log(residents)
     console.log("found " + residents.length + " active residents.")
-    _.forEach(residents, async(resident) => {
+    Promise.each(residents, async(resident) => {
         try{
             console.log("Start creating invoice...")
+            console.log(`Residet: ${resident.name}`)
             // Create invoices
             invoice = await invoiceHelper.CreateInvoice({resident:resident})
 
@@ -35,14 +36,12 @@ module.exports = async () => {
                 resident: resident
             }).then(res => res.json());
 
-            console.log(midtransResp)
-    
             // Notify resident using whatsapp
             whatsappResp = await whatsappHelper.sendMessage({
                 phoneNumber: phonenumberUtil.sanitizeIndonesiPhoneNumber(resident.phoneNumber),
                 message: generateInvoiceMessage({
                     name:resident.name,
-                    invoiceDate: invoice.invoiceDate,
+                    invoiceDate: invoice.toJSON().invoiceDate,
                     paymentLink: midtransResp.payment_url})
             }).then(res => res.json());
 
@@ -52,5 +51,7 @@ module.exports = async () => {
         } catch(err) {
             console.log(err)
         }
+    }).then(() => {
+        console.log("Process notify invoice finish")
     })
 }

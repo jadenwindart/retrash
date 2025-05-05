@@ -6,28 +6,28 @@ const {Resident} = require("./resident");
 module.exports.Invoice = db.sequelize.define(
     'invoices',
     {
-        'id': {
+        id: {
             primaryKey: true,
             type: DataTypes.UUIDV4,
             allowNull: false,
         },
-        'amount': {
+        amount: {
             type: DataTypes.NUMBER,
             allowNull: false,
         },
-        'invoice_date': {
+        invoiceDate: {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
-        'last_sent_at': {
+        lastSentAt: {
             type: DataTypes.DATE,
             allowNull: true,
         },
-        'status': {
+        status: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        'resident_id': {
+        residentId: {
             type: DataTypes.UUIDV4,
             allowNull: false,
         }

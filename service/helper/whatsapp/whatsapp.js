@@ -1,19 +1,48 @@
-module.exports.sendMessage = ({phoneNumber,message}) => {
+const _ = require('lodash')
+
+WTS_HOST =process.env.WTS_HOST
+
+const generateAccessToken = () => {
+    const data = JSON.stringify({
+        "email": "god@mode.com",
+        "password": "123"
+    });
+
+    const url = `${WTS_HOST}/api/v1/login`;
+
+    const config = {
+        method: 'POST',
+        body: data,
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+    };
+
+    return fetch(url, config)
+}
+
+module.exports.sendMessage = async ({phoneNumber,message}) => {
     let data = JSON.stringify({
         "phone": phoneNumber,
         "message": message
-      });
-      
-      let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'http://45.76.157.102:8069/api/v1/message/private',
+    });
+
+    const accessTokenRequest = await generateAccessToken().then(res => res.json())
+
+    console.log(accessTokenRequest)
+    const accessToken = _.get(accessTokenRequest, 'data.token.bearer')
+
+    const url = `${WTS_HOST}/api/v1/message/private`;
+    
+    console.log(data)
+    const config = {
+        method: 'POST',
+        body: data,
         headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiIxIiwic3ViIjoidXNlciIsImV4cCI6MTc0NTkwMTA3MywiaWF0IjoxNzQ1ODk3NDczfQ.17d8DoqM24IYLkMNoAP_X9Vt_nOpqTFifZ5H7NAdO8E'
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${accessToken}`
         },
-        data : data
-      };
+    };
       
     return fetch(url, config)
 }
