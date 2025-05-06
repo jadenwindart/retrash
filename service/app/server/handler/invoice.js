@@ -35,7 +35,20 @@ const updateStatus = async(req, res) => {
     }
 }
 
+const resendInvoice = async(req, res) => {
+    try {
+        await invoiceHelper.resendInvoiceNotification({invoiceId: req.params.invoiceId})
+
+        res.send()
+    } catch (error) {
+        console.log(error);
+
+        res.send({error: "Terjadi kesalahan pada sistem"})
+    }
+}
+
 router.get('', list)
 router.patch('/:invoiceId/status', updateStatus)
+router.post('/:invoiceId/resend', resendInvoice)
 
 module.exports = router

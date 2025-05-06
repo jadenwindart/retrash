@@ -5,7 +5,8 @@ const { v4 } = require('uuid');
 const _ = require('lodash');
 const {INVOICE_STATUS} = require('../enum/enum');
 const paginationUtil = require('../util/pagination');
-const whatsappHelper = require('../whatsapp/whatsapp')
+const whatsappHelper = require('../whatsapp/whatsapp');
+const midtransHelper = require('../midtrans/midtrans');
 
 module.exports.CreateInvoice = async ({resident}) => {
    return Invoice.create({
@@ -71,4 +72,37 @@ module.exports.UpdateInvoiceStatus = async ({invoiceId,invoiceStatus}) => {
     }
 
     return invoice
+}
+
+const generateInvoiceMessage = ({name, invoiceDate, paymentLink}) => `
+    Halo ${name},\n
+    Berikut tagihan anda yang tercatat pada tanggal ${invoiceDate}/\n
+    Pembayaran dapat menggunakan link dibawah ini:
+    ${paymentLink}
+`
+
+module.exports.resendInvoiceNotification = async ({invoiceId}) => {
+    invoice = await Invoice.findOne({where: {id:invoiceId}, include:Resident})
+
+    if (invoice.status == INVOICE_STATUS.PAID) {
+        return
+    }
+
+    resident = _.get(invoice, 'resident')
+
+    // Create Transaction in Payment Gateway
+    midtransResp = await midtransHelper.generatePaymentLink({
+        invoiceId: invoice.id,
+        amount: invoice.amount,
+        resident: resident
+    }).then(res => res.json());
+
+    // Notify resident using whatsapp
+    await whatsappHelper.sendMessage({
+        phoneNumber: resident.phoneNumber,
+        message: generateInvoiceMessage({
+            name:resident.name,
+            invoiceDate: invoice.toJSON().invoiceDate,
+            paymentLink: midtransResp.payment_url})
+    }).then(res => res.json());
 }

@@ -45,8 +45,6 @@ module.exports = async () => {
                     paymentLink: midtransResp.payment_url})
             }).then(res => res.json());
 
-            console.log(whatsappResp)
-
             await invoiceHelper.UpdateInvoiceSentAt(invoice)
         } catch(err) {
             console.log(err)
