@@ -1,4 +1,5 @@
-const {Transaction} = require('../../repository/model/transaction')
+const {Transaction} = require('../../repository/model/transaction');
+const {Resident} = require('../../repository/model/resident');
 const { v4 } = require('uuid');
 const _ = require('lodash');
 const paginationUtil = require('../util/pagination');
@@ -44,6 +45,7 @@ module.exports.list = ({filter={},sort=[],limit,page}) => {
         order: sort,
         limit: pagination.limit,
         offset: pagination.offset,
+        include: Resident
     })
 }
 
