@@ -8,6 +8,7 @@ const officerHelper = require('../../helper/officer/officer');
 const transactionRouter = require('./handler/transaction');
 const invoiceRouter = require('./handler/invoice');
 const midtransRouter = require('./handler/midtrans');
+const whatsappRouter = require('./handler/whatsapp');
 const middleware = require("./handler/middleware")
 const enumHelper = require("../../helper/enum/enum")
 var cors = require('cors')
@@ -37,6 +38,8 @@ app.use('/v1/invoices', middleware.validateToken, invoiceRouter)
 
 // midtrans notification
 app.use('/midtrans', midtransRouter)
+// whatsapp notification
+app.use('/whatsapp', whatsappRouter)
 
 app.listen(port, async() => {
   // default user
