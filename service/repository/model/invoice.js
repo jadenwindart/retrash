@@ -30,6 +30,10 @@ module.exports.Invoice = db.sequelize.define(
         residentId: {
             type: DataTypes.UUIDV4,
             allowNull: false,
+        },
+        paymentLink: {
+            type: DataTypes.STRING,
+            allowNull: true,
         }
     }
 )

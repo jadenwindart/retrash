@@ -90,19 +90,23 @@ module.exports.resendInvoiceNotification = async ({invoiceId}) => {
 
     resident = _.get(invoice, 'resident')
 
-    // Create Transaction in Payment Gateway
-    midtransResp = await midtransHelper.generatePaymentLink({
-        invoiceId: invoice.id,
-        amount: invoice.amount,
-        resident: resident
-    }).then(res => res.json());
-
     // Notify resident using whatsapp
     await whatsappHelper.sendMessage({
         phoneNumber: resident.phoneNumber,
         message: generateInvoiceMessage({
             name:resident.name,
             invoiceDate: invoice.toJSON().invoiceDate,
-            paymentLink: midtransResp.payment_url})
+            paymentLink: invoice.paymentLink})
     }).then(res => res.json());
+}
+
+module.exports.updatePaymentLink = async ({invoiceId, paymentLink}) => {
+    return Invoice.update(
+        { paymentLink: paymentLink },
+        {
+            where: {
+                id: invoiceId,
+            },
+        },
+    );
 }

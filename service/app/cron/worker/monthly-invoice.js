@@ -36,13 +36,17 @@ module.exports = async () => {
                 resident: resident
             }).then(res => res.json());
 
+            const paymentUrl = midtransResp.payment_url
+
+            await invoiceHelper.updatePaymentLink({invoiceId:invoice.id, paymentLink: paymentUrl})
+
             // Notify resident using whatsapp
             whatsappResp = await whatsappHelper.sendMessage({
                 phoneNumber: resident.phoneNumber,
                 message: generateInvoiceMessage({
                     name:resident.name,
                     invoiceDate: invoice.toJSON().invoiceDate,
-                    paymentLink: midtransResp.payment_url})
+                    paymentLink: paymentUrl})
             }).then(res => res.json());
 
             await invoiceHelper.UpdateInvoiceSentAt(invoice)
