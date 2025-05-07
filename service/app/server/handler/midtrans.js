@@ -16,6 +16,11 @@ const payment = async (req, res) => {
             'transaction_status',
             'gross_amount',
         ])
+
+        if ("settlement" != pickedBody.transaction_status) {
+            res.send()
+            return
+        }
     
         const validSignature = midtransHelper.validatePaymentNotificationSignature(pickedBody)
         if (!validSignature) {

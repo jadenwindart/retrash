@@ -34,7 +34,7 @@ module.exports.generatePaymentLink = async ({invoiceId, amount, resident}) => {
         },
         "enabled_payments": [
           "bca_va",
-          "indomaret"
+          "indomaret",
         ],
         "item_details": [
           {
