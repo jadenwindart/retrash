@@ -24,7 +24,7 @@ const payment = async (req, res) => {
 
         orderId = pickedBody.order_id.substring(0, 36)
     
-        await transactionHelper.updateCompleteTransaction({invoiceId: orderId, paidAmount: pickedBody.gross_amount})
+        await transactionHelper.updateCompleteTransaction({invoiceId: orderId, paidAmount: pickedBody.gross_amount, transactionTimestamp:pickedBody.transaction_time})
     
         res.status(200).send()
     } catch (error) {

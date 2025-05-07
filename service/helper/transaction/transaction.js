@@ -56,11 +56,12 @@ module.exports.list = ({filter={},sort=[],limit,page}) => {
     })
 }
 
-module.exports.updateCompleteTransaction = async ({invoiceId,paidAmount}) => {
+module.exports.updateCompleteTransaction = async ({invoiceId,paidAmount,transactionTimestamp}) => {
     const transaction = await Transaction.findOne({ where: {invoiceId: invoiceId}})
 
     transaction.paidAmount = paidAmount
     transaction.status = TRANSACTION_STATUS.COMPLETED
+    transaction.transactionTimestamp = transactionTimestamp
     
     await transaction.save()
 

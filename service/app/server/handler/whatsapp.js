@@ -14,7 +14,7 @@ const generateTransactionHistoryMessage = (resident, transactions) => {
 
     for (let index = 0; index < transactions.length; index++) {
         const transaction = transactions[index];
-        message = message + `${index}. jumlah: ${transaction.paidAmount}, waktu pembayaran ${transaction.transactionTimestamp}`
+        message = message + `${index + 1}. jumlah: ${transaction.paidAmount}, waktu pembayaran ${transaction.transactionTimestamp} \n`
     }
 
     return message
