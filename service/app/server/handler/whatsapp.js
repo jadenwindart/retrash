@@ -36,7 +36,7 @@ const receiveMessage = async (req, res) => {
             case 'riwayat pembayaran':
                 const resident = await residentHelper.GetResidentByPhoneNumber(phoneNumberUtil.sanitizeIndonesiPhoneNumber(body.sender));
 
-                const transactions = await transactionHelper.list({filter:{residentId:resident.id},sort:[["createdAt","DESC"]],limit:5,page:1})
+                const transactions = await transactionHelper.list({filter:{residentId:resident.id},limit:5,page:1})
                 const message = generateTransactionHistoryMessage(resident,transactions)
 
                 await whatsappHelper.sendMessage({
