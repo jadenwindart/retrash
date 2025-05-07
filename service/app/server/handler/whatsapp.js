@@ -13,7 +13,7 @@ const generateTransactionHistoryMessage = (resident, transactions) => {
     `
 
     for (let index = 0; index < transactions.length; index++) {
-        const transaction = array[index];
+        const transaction = transactions[index];
         message = message + `${index}. jumlah: ${transaction.paidAmount}, waktu pembayaran ${transaction.transactionTimestamp}`
     }
 
@@ -35,8 +35,8 @@ const receiveMessage = async (req, res) => {
         switch (body.text.toLowerCase()) {
             case 'riwayat pembayaran':
                 const resident = await residentHelper.GetResidentByPhoneNumber(phoneNumberUtil.sanitizeIndonesiPhoneNumber(body.sender));
-
-                const transactions = await transactionHelper.list({filter:{residentId:resident.id},limit:5,page:1})
+                console.log(resident);
+                const transactions = await transactionHelper.list({filter:{'residentId':resident.id},limit:5,page:1})
                 const message = generateTransactionHistoryMessage(resident,transactions)
 
                 await whatsappHelper.sendMessage({

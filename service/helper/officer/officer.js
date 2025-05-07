@@ -82,7 +82,7 @@ const hashPassword = (password) => {
 module.exports.OfficerList = async ({filter={},sort=[],limit,page}) => {
     pagination = paginationUtil.Paginate({limit,page})
 
-    whereClause = _.map(filter, (v,k) => {
+    whereClause = _.forEach(filter, (v,k) => {
         return {
             [k]: {
                 [Op.eq]: v

@@ -23,7 +23,7 @@ module.exports.Initiate = ({resident,invoice,isManual=false}) => {
 module.exports.list = ({filter={},sort=[],limit,page}) => {
     pagination = paginationUtil.Paginate({limit,page})
     
-    whereClause = _.map(filter, (v,k) => {
+    whereClause = _.forEach(filter, (v,k) => {
         return {
             [k]: {
                 [Op.eq]: v
@@ -36,7 +36,12 @@ module.exports.list = ({filter={},sort=[],limit,page}) => {
     } else {
         sort = JSON.parse(sort)
     }
-
+    console.log({
+        ...whereClause,
+        status: {
+            [Op.eq]: TRANSACTION_STATUS.COMPLETED
+        },
+    })
     return Transaction.findAll({
         where: {
             ...whereClause,

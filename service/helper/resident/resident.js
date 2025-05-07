@@ -21,7 +21,7 @@ module.exports.CreateResident = async (residentInfo) => {
 module.exports.GetResidentList = async ({filter={},sort=[],limit,page}) => {
     pagination = paginationUtil.Paginate({limit,page})
 
-    whereClause = _.map(filter, (v,k) => {
+    whereClause = _.forEach(filter, (v,k) => {
         return {
             [k]: {
                 [Op.eq]: v
