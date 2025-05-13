@@ -7,7 +7,7 @@ const {INVOICE_STATUS} = require('../enum/enum');
 const paginationUtil = require('../util/pagination');
 const whatsappHelper = require('../whatsapp/whatsapp');
 const midtransHelper = require('../midtrans/midtrans');
-const { Op } = require('sequelize');
+const { Op, ENUM } = require('sequelize');
 
 module.exports.CreateInvoice = async ({resident}) => {
    return Invoice.create({
@@ -27,6 +27,12 @@ module.exports.UpdateInvoiceSentAt = async (invoice) => {
 
 module.exports.InvoiceList = async ({filter={},sort=[],limit,page}) => {
     pagination = paginationUtil.Paginate({limit,page})
+
+    if (filter == {}) {
+        filter = {
+            "status": INVOICE_STATUS.UNPAID,
+        }
+    }
     
     whereClause = _.forEach(filter, (v,k) => {
         return {
