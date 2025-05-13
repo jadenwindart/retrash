@@ -50,6 +50,11 @@ module.exports.GetResidentList = async ({filter={},sort=[],limit,page}) => {
 
 module.exports.UpdateResident = async (updatedResident) => {
     existingResident = await Resident.findOne({ where: {id:updatedResident.id} })
+
+    phoneNumber = phoneNumberUtil.sanitizeIndonesiPhoneNumber(_.get(updatedResident, 'phoneNumber'))
+    if (phoneNumber) {
+        updatedResident.phoneNumber = phoneNumberUtil.sanitizeIndonesiPhoneNumber(phoneNumber);
+    }
     
     existingResident = _.merge(existingResident, updatedResident)
 
