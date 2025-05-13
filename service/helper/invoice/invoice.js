@@ -28,7 +28,7 @@ module.exports.UpdateInvoiceSentAt = async (invoice) => {
 module.exports.InvoiceList = async ({filter={},sort=[],limit,page}) => {
     pagination = paginationUtil.Paginate({limit,page})
 
-    if (filter == {}) {
+    if (_.keys(filter).length == 0) {
         filter = {
             "status": INVOICE_STATUS.UNPAID,
         }
