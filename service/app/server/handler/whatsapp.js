@@ -4,6 +4,7 @@ const residentHelper = require('../../../helper/resident/resident');
 const transactionHelper = require('../../../helper/transaction/transaction');
 const whatsappHelper = require('../../../helper/whatsapp/whatsapp');
 const phoneNumberUtil = require('../../../helper/util/phonenumber');
+const moment = require('moment');
 const router = express.Router();
 
 const generateTransactionHistoryMessage = (resident, transactions) => {
@@ -14,7 +15,8 @@ const generateTransactionHistoryMessage = (resident, transactions) => {
 
     for (let index = 0; index < transactions.length; index++) {
         const transaction = transactions[index];
-        message = message + `${index + 1}. jumlah: ${transaction.paidAmount}, waktu pembayaran ${transaction.transactionTimestamp} \n`
+        const formattedDateTime = moment(transaction.transactionTimestamp).format('DD MMMM YYYY HH:mm:ss');
+        message = message + `${index + 1}. jumlah: ${transaction.paidAmount}, waktu pembayaran: ${formattedDateTime} \n`;
     }
 
     return message
