@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment');
 const invoiceHelper = require('../../../helper/invoice/invoice');
 const transactionHelper = require('../../../helper/transaction/transaction');
 const {INVOICE_STATUS} = require('../../../helper/enum/enum')
@@ -28,7 +29,8 @@ const updateStatus = async(req, res) => {
         body = req.body
 
         if (body.status == INVOICE_STATUS.PAID) {
-            const invoice = await transactionHelper.updateCompleteTransaction({invoiceId: req.params.invoiceId, paidAmount: body.paidAmount, transactionTimestamp: body.transactionTimestamp})
+            const invoice = await invoiceHelper.GetInvoiceById(req.params.invoiceId)
+            await transactionHelper.updateCompleteTransaction({invoiceId: invoice.id, paidAmount: invoice.amount, transactionTimestamp: moment().format('YYYY-MM-DD HH:mm:ss')})
             res.send(invoice)
             return
         }
@@ -37,7 +39,7 @@ const updateStatus = async(req, res) => {
 
         res.send(invoice)
     } catch (error) {
-        console.log(err);
+        console.log(error);
 
         res.send({error: "Terjadi kesalahan pada sistem"})
     }

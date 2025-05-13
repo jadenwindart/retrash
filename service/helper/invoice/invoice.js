@@ -57,6 +57,14 @@ module.exports.InvoiceList = async ({filter={},sort=[],limit,page}) => {
     })
 }
 
+module.exports.GetInvoiceById = async (invoiceId) => {
+    return Invoice.findOne({
+        where: {
+            id: invoiceId,
+        },
+    })
+}
+
 const generatePaidMessage = ({name,invoiceDate}) => `
     Halo ${name},\n
     Terima kasih sudah melakukan pembayaran tagihan untuk tanggal ${invoiceDate}
