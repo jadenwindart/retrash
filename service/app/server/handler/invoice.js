@@ -1,5 +1,7 @@
 const express = require('express');
 const invoiceHelper = require('../../../helper/invoice/invoice');
+const transactionHelper = require('../../../helper/transaction/transaction');
+const {INVOICE_STATUS} = require('../../../helper/enum/enum')
 const router = express.Router();
 
 const list = async (req, res) => {
@@ -24,6 +26,12 @@ const list = async (req, res) => {
 const updateStatus = async(req, res) => {
     try {
         body = req.body
+
+        if (body.status == INVOICE_STATUS.PAID) {
+            const invoice = await transactionHelper.updateCompleteTransaction({invoiceId: req.params.invoiceId, paidAmount: body.paidAmount, transactionTimestamp: body.transactionTimestamp})
+            res.send(invoice)
+            return
+        }
 
         invoice = await invoiceHelper.UpdateInvoiceStatus({invoiceId: req.params.invoiceId, invoiceStatus: body.status})
 
