@@ -37,9 +37,9 @@ const updateStatus = async(req, res) => {
 
 const resendInvoice = async(req, res) => {
     try {
-        await invoiceHelper.resendInvoiceNotification({invoiceId: req.params.invoiceId})
+        const invoice = await invoiceHelper.resendInvoiceNotification({invoiceId: req.params.invoiceId})
 
-        res.send()
+        res.send(invoice)
     } catch (error) {
         console.log(error);
 

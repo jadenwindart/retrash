@@ -105,6 +105,8 @@ module.exports.resendInvoiceNotification = async ({invoiceId}) => {
             invoiceDate: invoice.toJSON().invoiceDate,
             paymentLink: invoice.paymentLink})
     }).then(res => res.json());
+
+    return invoice;
 }
 
 module.exports.updatePaymentLink = async ({invoiceId, paymentLink}) => {
