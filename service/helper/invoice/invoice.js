@@ -12,7 +12,7 @@ const { Op, ENUM } = require('sequelize');
 module.exports.CreateInvoice = async ({resident}) => {
    return Invoice.create({
         id: v4(),
-        amount: '10000',
+        amount: '30000',
         invoiceDate: moment().toDate(),
         lastSentAt: null,
         status: INVOICE_STATUS.UNPAID,
